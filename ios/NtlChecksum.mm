@@ -11,7 +11,10 @@ RCT_REMAP_METHOD(getChecksum,
                  withRejecter:(RCTPromiseRejectBlock)reject)
 {
 
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"main" ofType:@"jsbundle"];
+    // NSString *path = [[NSBundle mainBundle] pathForResource:@"main" ofType:@"jsbundle"];
+    NSBundle *main = [NSBundle mainBundle];
+    NSURL *pathUrl = [main URLForResource:@"main" withExtension:@"jsbundle"];
+    NSString *path = [pathUrl absoluteString];
     NSString *data = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
 
     if (data == nil) {
