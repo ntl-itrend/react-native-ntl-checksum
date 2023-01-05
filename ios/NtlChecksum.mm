@@ -10,32 +10,20 @@ RCT_REMAP_METHOD(getChecksum,
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 {
-
-    // NSString *path = [[NSBundle mainBundle] pathForResource:@"main" ofType:@"jsbundle"];
-    NSBundle *main = [NSBundle mainBundle];
-    NSURL *pathUrl = [main URLForResource:@"main" withExtension:@"jsbundle"];
-    NSString *path = [pathUrl absoluteString];
-    NSString *data = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-
-    if (path == nil) {
-        resolve(@"not found");
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"main" ofType:@"jsbundle"];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    if(data == nil) {
+        resolve(@"");
         return;
     }
-
-    resolve(path);
-    return
-    
-    const char* str = [data UTF8String];
-    
+    NSMutableData *macOut = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
     unsigned char result[CC_SHA256_DIGEST_LENGTH];
-    CC_SHA256(str, strlen(str), result);
-
+    CC_SHA256(data.bytes, data.length, result);
     NSMutableString *ret = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH*2];
     for(int i = 0; i<CC_SHA256_DIGEST_LENGTH; i++)
     {
         [ret appendFormat:@"%02x",result[i]];
     }
-
     resolve(ret);
 }
 
