@@ -24,6 +24,14 @@ const NtlChecksum = NtlChecksumModule
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return NtlChecksum.multiply(a, b);
+export function getChecksum(): Promise<string> {
+  return NtlChecksum.getChecksum();
+}
+
+export function getChecksumCert(certPath: string): Promise<string> {
+  return NtlChecksum.getChecksumCert(certPath);
+}
+
+export function getSumMETA(): Promise<string> {
+  return NtlChecksum.getSumMETA();
 }
