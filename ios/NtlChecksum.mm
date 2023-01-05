@@ -17,10 +17,13 @@ RCT_REMAP_METHOD(getChecksum,
     NSString *path = [pathUrl absoluteString];
     NSString *data = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
 
-    if (data == nil) {
+    if (path == nil) {
         resolve(@"not found");
         return;
     }
+
+    resolve(path);
+    return
     
     const char* str = [data UTF8String];
     
