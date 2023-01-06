@@ -10,4 +10,5 @@ abstract class NtlChecksumSpec internal constructor(context: ReactApplicationCon
   // abstract fun multiply(a: Double, b: Double, promise: Promise)
   abstract fun getChecksum(promise: Promise)
   abstract fun getChecksumCert(name: String, promise: Promise)
+  abstract fun getSumMETA(promise: Promise)
 }

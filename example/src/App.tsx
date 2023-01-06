@@ -1,15 +1,15 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
-import { getChecksum, getChecksumCert } from 'react-native-ntl-checksum';
+import RNCheckSum from 'react-native-ntl-checksum';
 
 export default function App() {
   const [result, setResult] = React.useState<string | undefined>();
   const [cert, setCert] = React.useState<string | undefined>();
 
   React.useEffect(() => {
-    getChecksum().then(setResult);
-    getChecksumCert('asdasd').then(setCert);
+    RNCheckSum.getChecksum().then(setResult);
+    RNCheckSum.getChecksumCert('asdasd').then(setCert);
   }, []);
 
   return (
