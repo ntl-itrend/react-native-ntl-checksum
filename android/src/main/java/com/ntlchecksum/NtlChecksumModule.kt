@@ -49,54 +49,39 @@ class NtlChecksumModule internal constructor(context: ReactApplicationContext) :
     } catch (e: Exception) {
       promise.resolve("")
     }
-    // try {
-
-    // } catch(Exception e){
-
-    // }
-      //  byte[] hash = null;
-      //   StringBuilder sb = new StringBuilder();
-      //   try {
-      //       AssetManager assetManager = getReactApplicationContext().getAssets();
-      //       InputStream stream = assetManager.open("index.android.bundle");
-      //       if (stream == null) {
-      //           promise.resolve("");
-      //           return;
-      //       }
-      //       int size = stream.available();
-      //       byte[] buffer = new byte[size];
-      //       stream.read(buffer);
-      //       stream.close();
-      //       hash = MessageDigest.getInstance("SHA-256").digest(buffer);
-      //       if (hash == null) {
-      //           promise.resolve("");
-      //           return;
-      //       }
-
-      //   } catch (Exception ex) {
-      //       ex.printStackTrace();
-      //       promise.resolve("");
-      //       return;
-      //   }
-
-      //   MessageDigest md = null;
-      //   try {
-      //       for (int i = 0; i < hash.length; i++) {
-      //           sb.append(Integer.toString((hash[i] & 0xff) + 0x100, 16).substring(1));
-      //       }
-
-      //       promise.resolve(sb.toString());
-      //       return;
-      //   } catch (Exception e) {
-      //       e.printStackTrace();
-      //       promise.resolve("");
-      //       return;
-      //   }
   }
 
   @ReactMethod
   override fun getChecksumCert(name: String, promise: Promise) {
-    promise.resolve("cert")
+    val hash: ByteArray
+    val sb = StringBuilder()
+    try {
+      val assetManager = getReactApplicationContext().getAssets()
+      val stream: InputStream = assetManager.open(name.toString() + ".cer")
+      if(stream == null) {
+        promise.resolve("")
+      }
+      val size: Int = stream.available()
+      val buffer = stream.readBytes()
+      hash = MessageDigest.getInstance("SHA-256").digest(buffer)
+      if(hash == null) {
+        promise.resolve("")
+        return
+      }
+      val md: MessageDigest
+      for(i in hash) {
+        sb.append(Integer.toString((i.toInt() and 0xff)+ 0x100, 16).substring(1))
+      }
+      promise.resolve(sb.toString())
+      return
+    } catch(e: Exception){
+      promise.resolve("")
+    }
+  }
+
+  @ReactMethod
+  override fun getSumMETA(promise: Promise) {
+    promise.resolve("")
   }
 
   companion object {
