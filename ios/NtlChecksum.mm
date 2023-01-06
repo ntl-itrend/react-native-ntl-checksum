@@ -6,9 +6,8 @@ RCT_EXPORT_MODULE()
 
 // Example method
 // See // https://reactnative.dev/docs/native-modules-ios
-RCT_REMAP_METHOD(getChecksum,
-                 withResolver:(RCTPromiseResolveBlock)resolve
-                 withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(getChecksum:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject)
 {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"main" ofType:@"jsbundle"];
     NSData *data = [NSData dataWithContentsOfFile:path];
@@ -24,6 +23,30 @@ RCT_REMAP_METHOD(getChecksum,
     {
         [ret appendFormat:@"%02x",result[i]];
     }
+    resolve(ret);
+}
+
+RCT_EXPORT_METHOD(getChecksumCert:(NSString *)certName resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    NSError* error = nil;
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:certName ofType:@"cer"];
+    NSData *nsData = [NSData dataWithContentsOfFile:path];
+    
+   if (nsData == nil) {
+       resolve(nil);
+       return;
+   }
+    
+    unsigned char result[CC_SHA256_DIGEST_LENGTH];
+    CC_SHA256([nsData bytes], [nsData length], result);
+
+    NSMutableString *ret = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH*2];
+    for(int i = 0; i<CC_SHA256_DIGEST_LENGTH; i++)
+    {
+        [ret appendFormat:@"%02x",result[i]];
+    }
+
     resolve(ret);
 }
 
