@@ -25,11 +25,11 @@ const NtlChecksum = NtlChecksumModule
     );
 
 function getChecksum(): Promise<string> {
-  return NtlChecksum.getChecksum();
+  return NtlChecksum.getChecksum().then((sum: string) => sum.replace(/-/g,''));
 }
 
 function getChecksumCert(certPath: string): Promise<string> {
-  return NtlChecksum.getChecksumCert(certPath);
+  return NtlChecksum.getChecksumCert(certPath).then((sum: string) => sum.replace(/-/g,''));
 }
 
 function getSumMETA(): Promise<string> {
